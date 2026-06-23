@@ -14,7 +14,7 @@ const CyberLoader = ({ onComplete }) => {
   ];
 
   useEffect(() => {
-    const totalDuration = 2500;
+    const totalDuration = 1700;
     const intervalTime = 50;
     const steps = totalDuration / intervalTime;
     let currentStep = 0;
@@ -31,7 +31,7 @@ const CyberLoader = ({ onComplete }) => {
 
       if (currentStep >= steps) {
         clearInterval(timer);
-        setTimeout(onComplete, 500);
+        setTimeout(onComplete, 300);
       }
     }, intervalTime);
 
