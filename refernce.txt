@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIGNESH M | Java Developer & Cybersecurity Engineer</title>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Professional Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Orbitron:wght@400;600;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-magenta: #ff00ff;
+            --neon-lime: #39ff14;
+            --dark-bg: #010103;
+            --panel-bg: rgba(10, 12, 18, 0.98);
+        }
+
+        /* --- THEME LOCK: CUSTOM CURSOR --- */
+        * { cursor: none !important; }
+        #cursor-dot { width: 6px; height: 6px; background: var(--neon-cyan); position: fixed; border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); transition: transform 0.1s; }
+        #cursor-hud { width: 40px; height: 40px; border: 1px solid var(--neon-cyan); position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, border-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .cursor-hover #cursor-hud { width: 60px; height: 60px; border-color: var(--neon-magenta); transform: translate(-50%, -50%) rotate(45deg); background: rgba(255, 0, 255, 0.05); }
+
+        body { background-color: var(--dark-bg); color: #e0e0e0; font-family: 'JetBrains Mono', monospace; overflow: hidden; height: 100vh; }
+
+        /* --- THEME LOCK: MATRIX BACKGROUND --- */
+        #matrix-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.1; pointer-events: none; }
+
+        /* --- BOOT SEQUENCE --- */
+        #boot-overlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .loader-rail { width: 250px; height: 1px; background: #111; margin-top: 25px; overflow: hidden; }
+        .loader-fill { width: 0%; height: 100%; background: var(--neon-cyan); box-shadow: 0 0 15px var(--neon-cyan); }
+
+        /* --- HUD VANGUARD PANELS --- */
+        .vanguard-panel { background: var(--panel-bg); border: 1px solid rgba(0, 243, 255, 0.1); backdrop-filter: blur(15px); position: relative; transition: all 0.5s cubic-bezier(0.2, 1, 0.2, 1); transform-style: preserve-3d; }
+        .vanguard-panel:hover { border-color: var(--neon-cyan); box-shadow: 0 0 50px rgba(0, 243, 255, 0.1); }
+        
+        .laser-scan::after { content: ""; position: absolute; top: -100%; left: 0; width: 100%; height: 3px; background: var(--neon-cyan); box-shadow: 0 0 12px var(--neon-cyan); opacity: 0.3; animation: scan-pass 5s linear infinite; pointer-events: none; }
+        @keyframes scan-pass { 0% { top: -10%; } 100% { top: 110%; } }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4, .nav-btn { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
+        .hero-name { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; color: #fff; text-shadow: 3px 3px 0px var(--neon-cyan); line-height: 1; }
+
+        /* --- BUTTONS --- */
+        .btn-apex { background: var(--neon-cyan); color: #000; font-weight: 900; padding: 12px 32px; clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); transition: 0.3s; border: none; font-size: 0.75rem; text-transform: uppercase; }
+        .btn-apex:hover { background: white; transform: scale(1.05); box-shadow: 0 0 20px white; }
+        .btn-outline { border: 1px solid rgba(255,255,255,0.1); color: #fff; font-weight: 700; padding: 12px 32px; font-size: 0.75rem; text-transform: uppercase; clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); transition: 0.3s; }
+        .btn-outline:hover { border-color: var(--neon-cyan); background: rgba(0, 243, 255, 0.05); }
+
+        /* --- SKILL BARS --- */
+        .skill-rail { height: 4px; background: rgba(255,255,255,0.05); margin-top: 12px; overflow: hidden; }
+        .skill-fill { height: 100%; width: 0%; background: var(--neon-cyan); transition: width 2s cubic-bezier(0.1, 1, 0.1, 1); box-shadow: 0 0 10px var(--neon-cyan); }
+
+        /* --- LIVE LOGS --- */
+        #live-logs { position: fixed; bottom: 20px; right: 20px; width: 220px; height: 80px; background: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.05); font-size: 8px; padding: 10px; color: var(--neon-lime); pointer-events: none; z-index: 100; font-family: 'JetBrains Mono'; }
+
+        /* --- CONTACT TERMINAL --- */
+        .terminal-input { background: rgba(0, 10, 15, 0.7); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-family: 'JetBrains Mono'; font-size: 0.8rem; padding: 15px; outline: none; width: 100%; transition: 0.3s; }
+        .terminal-input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.1); }
+
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-cyan); }
+    </style>
+</head>
+<body class="selection:bg-cyan-500/30">
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-hud"></div>
+
+    <!-- System Boot sequence -->
+    <div id="boot-overlay">
+        <div class="text-cyan-500 text-xs tracking-[0.6em] animate-pulse">VIGNESH_VANGUARD_OS_V16 // AUTHORIZING</div>
+        <div class="loader-rail"><div class="loader-fill" id="boot-progress"></div></div>
+        <div id="boot-status" class="text-[8px] text-gray-600 mt-4 font-mono uppercase tracking-widest">Mounting_Security_Cores...</div>
+    </div>
+
+    <!-- Matrix Canvas -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Live Logs -->
+    <div id="live-logs">
+        <div id="log-stream"></div>
+    </div>
+
+    <!-- Visitor HUD -->
+    <div id="visitor-hud" style="position:fixed; bottom:20px; left:20px; font-size:8px; color:var(--neon-cyan); opacity:0.5; pointer-events:none; z-index:100;">
+        SESSION_ID: 0x982A1<br>
+        UPLINK: SECURE_AES256<br>
+        LOC: CHENNAI_NODE
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-black/90 border-b border-white/5 backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto px-8 flex justify-between items-center h-20">
+            <div class="flex items-center gap-4 cursor-pointer" onclick="location.reload()">
+                <div class="w-10 h-10 border border-cyan-500/30 flex items-center justify-center font-bold text-cyan-500 bg-cyan-500/5">V</div>
+                <div class="hidden sm:block">
+                    <div class="text-[11px] font-bold text-white uppercase tracking-widest leading-none">VIGNESH M</div>
+                    <div class="text-[7px] text-cyan-500 uppercase opacity-60 mt-1">Master_Apex_Admin</div>
+                </div>
+            </div>
+            <div class="hidden md:flex space-x-8 text-[10px] font-black tracking-[0.2em] uppercase">
+                <button onclick="scrollToSection('hero')" class="hover:text-cyan-400 transition-all cursor-pointer">CORE</button>
+                <button onclick="scrollToSection('skills')" class="hover:text-cyan-400 transition-all cursor-pointer">NEURAL</button>
+                <button onclick="scrollToSection('missions')" class="hover:text-cyan-400 transition-all cursor-pointer">MISSIONS</button>
+                <button onclick="scrollToSection('uplink')" class="hover:text-cyan-400 transition-all cursor-pointer">UPLINK</button>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#" onclick="triggerCVExtraction()" class="btn-apex !px-5 !py-2 !text-[9px]">EXTRACT_CV.sh</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Viewport -->
+    <div id="main-view" class="opacity-0 transition-opacity duration-1000 overflow-y-auto h-screen scroll-smooth">
+        
+        <!-- Hero Section -->
+        <header id="hero" class="pt-52 pb-32 px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            <div class="lg:col-span-8 space-y-8">
+                <div class="flex items-center gap-3 text-cyan-500 text-[10px] font-bold uppercase tracking-[0.4em]">
+                    <span class="w-2 h-2 bg-cyan-500 rounded-full animate-ping"></span>
+                    Verified_Vanguard_Node // Authorized
+                </div>
+                
+                <h1 class="hero-name">VIGNESH M</h1>
+                
+                <h2 class="text-xl md:text-2xl text-gray-500 font-bold uppercase tracking-tighter">
+                    Java Developer <span class="text-cyan-900 mx-2">/</span> Cybersecurity Engineer <span class="text-cyan-900 mx-2">/</span> Full-Stack Node
+                </h2>
+
+                <p class="text-gray-400 font-mono text-sm leading-relaxed max-w-2xl border-l-2 border-cyan-900/50 pl-6 italic">
+                    "Motivated Computer Science Engineering student with a strong interest in cybersecurity and full-stack web development. Passionate about building secure, user-friendly applications and continuously improving problem-solving skills."
+                </p>
+
+                <div class="flex flex-wrap gap-6 pt-4">
+                    <button onclick="scrollToSection('missions')" class="btn-apex shadow-[0_0_20px_rgba(0,243,255,0.2)]">Explore Missions</button>
+                    <button onclick="scrollToSection('uplink')" class="btn-outline">Secure Handshake</button>
+                </div>
+
+                <div class="flex gap-8 pt-8 opacity-40">
+                    <a href="https://linkedin.com/in/vignesh-m-b4a5ba300" target="_blank" class="text-[9px] hover:text-cyan-400 transition-all font-bold tracking-widest">LINKEDIN_UPLINK</a>
+                    <a href="#" class="text-[9px] hover:text-cyan-400 transition-all font-bold tracking-widest">GITHUB_REPO</a>
+                </div>
+            </div>
+
+            <!-- Profile Overview Widget -->
+            <div class="lg:col-span-4 hidden lg:block">
+                <div class="hud-panel p-10 text-center border-t-2 border-magenta-500 tilt-card">
+                    <div class="laser-scan"></div>
+                    <span class="text-[9px] text-cyan-500/50 uppercase block mb-4">Neural_Metadata_Verified</span>
+                    <div class="text-5xl font-black text-white">8.98</div>
+                    <div class="text-[9px] text-gray-500 font-bold mt-2 uppercase tracking-widest">Aggregate_CGPA</div>
+                    <div class="mt-8 pt-6 border-t border-white/5 space-y-4">
+                        <div class="flex justify-between text-[9px] font-bold">
+                            <span class="text-gray-600">STATUS:</span>
+                            <span class="text-white">SECOND_YEAR_STUDENT</span>
+                        </div>
+                        <div class="flex justify-between text-[9px] font-bold">
+                            <span class="text-gray-600">LEVEL:</span>
+                            <span class="text-white">INTERN_VETERAN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- About/Why Hire Section -->
+        <section id="about" class="scroll-mt-32 px-8 max-w-7xl mx-auto my-32">
+            <div class="flex items-center gap-6 mb-16">
+                <h2 class="text-4xl font-black text-white uppercase tracking-tighter">VALUE_PROPOSITION</h2>
+                <div class="h-px flex-1 bg-white/5"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="hud-panel p-8 tilt-card">
+                    <span class="text-2xl mb-4 block">🛡</span>
+                    <h4 class="text-[11px] font-bold text-white mb-2 uppercase">Secure SDLC</h4>
+                    <p class="text-[9px] text-gray-500 leading-relaxed uppercase">Focused on ethical hacking foundations and defensive coding architectures from day one.</p>
+                </div>
+                <div class="hud-panel p-8 tilt-card">
+                    <span class="text-2xl mb-4 block">☕</span>
+                    <h4 class="text-[11px] font-bold text-white mb-2 uppercase">Java Engineering</h4>
+                    <p class="text-[9px] text-gray-500 leading-relaxed uppercase">Strong problem-solving capability with Java, C, and Python backends.</p>
+                </div>
+                <div class="hud-panel p-8 tilt-card">
+                    <span class="text-2xl mb-4 block">⚛</span>
+                    <h4 class="text-[11px] font-bold text-white mb-2 uppercase">Full-Stack MERN</h4>
+                    <p class="text-[9px] text-gray-500 leading-relaxed uppercase">Skilled in React.js, Node, and MongoDB basics for high-def responsive UI.</p>
+                </div>
+                <div class="hud-panel p-8 tilt-card">
+                    <span class="text-2xl mb-4 block">🧠</span>
+                    <h4 class="text-[11px] font-bold text-white mb-2 uppercase">Agile Agility</h4>
+                    <p class="text-[9px] text-gray-500 leading-relaxed uppercase">Continuous learner with growth mindset, proven in internship environments.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Neural Load Matrix & Stack (As per your Screenshot) -->
+        <section id="skills" class="scroll-mt-32 px-8 max-w-7xl mx-auto my-48">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Radar Visualization -->
+                <div class="hud-panel p-12 rounded-2xl tilt-card">
+                    <h3 class="text-xs font-bold text-cyan-500 uppercase tracking-[0.4em] mb-12 text-center">NEURAL_LOAD_MATRIX</h3>
+                    <div class="h-[320px]">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+                <!-- Saturation Progress -->
+                <div class="hud-panel p-12 rounded-2xl tilt-card">
+                    <h3 class="text-xs font-bold text-magenta-500 uppercase tracking-[0.4em] mb-12 text-center">TECH_STACK_SATURATION</h3>
+                    <div class="space-y-8" id="skills-container">
+                        <!-- Dynamic Skills Injected -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Internship Section -->
+        <section class="scroll-mt-32 px-8 max-w-7xl mx-auto my-48">
+            <div class="flex items-center gap-6 mb-16">
+                <h2 class="text-3xl font-black text-white uppercase tracking-tighter">PRACTICAL_EXPERIENCE</h2>
+                <div class="h-px flex-1 bg-white/5"></div>
+            </div>
+
+            <div class="hud-panel p-10 border-l-4 border-lime-500 group">
+                <div class="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
+                    <div>
+                        <span class="text-[9px] text-lime-500 font-bold uppercase tracking-widest">Active_Node_History</span>
+                        <h3 class="text-2xl font-bold text-white uppercase mt-1">Full Stack Web Development Intern</h3>
+                        <div class="text-cyan-500 font-bold text-sm mt-1 uppercase tracking-tighter">Adventure Technology Solutions Pvt Ltd</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs font-bold text-white px-4 py-1 border border-white/10 bg-white/5">02/06/2025 – 02/07/2025</div>
+                        <div class="text-[9px] text-gray-600 uppercase mt-2">Tambaram, Chennai</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                    <div class="lg:col-span-2">
+                        <h4 class="text-[10px] font-bold text-gray-500 mb-6 uppercase tracking-widest border-b border-white/5 pb-2">Mission_Parameters</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-4 text-[11px] text-gray-300 uppercase leading-relaxed"><span class="text-lime-500 mt-1">▶</span> Engineered responsive web interfaces using React.js and modern CSS patterns.</li>
+                            <li class="flex items-start gap-4 text-[11px] text-gray-300 uppercase leading-relaxed"><span class="text-lime-500 mt-1">▶</span> Assisted in backend integration tasks, bridging UI nodes with data layers.</li>
+                            <li class="flex items-start gap-4 text-[11px] text-gray-300 uppercase leading-relaxed"><span class="text-lime-500 mt-1">▶</span> Gained hand-on mastery over HTML5, CSS3, JavaScript, and Full-Stack workflows.</li>
+                        </ul>
+                    </div>
+                    <div class="vanguard-panel p-6 bg-black/40">
+                        <h4 class="text-[10px] font-bold text-white mb-4 uppercase">Node_Tools</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 border border-cyan-900 text-[8px] text-cyan-400">REACT.JS</span>
+                            <span class="px-2 py-1 border border-cyan-900 text-[8px] text-cyan-400">NODE.JS</span>
+                            <span class="px-2 py-1 border border-cyan-900 text-[8px] text-cyan-400">JAVASCRIPT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Missions -->
+        <section id="missions" class="scroll-mt-32 px-8 max-w-7xl mx-auto my-48">
+            <div class="flex items-center gap-6 mb-16">
+                <h2 class="text-4xl font-black text-white uppercase tracking-tighter">PROJECT_MISSIONS</h2>
+                <div class="h-px flex-1 bg-white/5"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- CyberSec EduSuite -->
+                <div class="hud-panel group laser-scan tilt-node overflow-hidden">
+                    <div class="p-10">
+                        <div class="flex justify-between text-[9px] mb-8 font-bold uppercase">
+                            <span class="text-magenta-500 border border-magenta-900 px-2 py-0.5">OPS: SEC_SIM</span>
+                            <span class="text-gray-600">status: stable</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-4 group-hover:text-cyan-400 transition uppercase">CyberSec EduSuite</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-10 h-16">A Linux-based educational cybersecurity simulation tool designed to teach cybersecurity concepts through safe, containerized labs.</p>
+                        
+                        <div class="flex flex-wrap gap-3 mb-8">
+                            <span class="px-3 py-1 bg-black border border-white/5 text-[9px] text-white">LINUX</span>
+                            <span class="px-3 py-1 bg-black border border-white/5 text-[9px] text-white">SECURITY_LABS</span>
+                        </div>
+
+                        <a href="https://www.linkedin.com/posts/vignesh-m-b4a5ba300_cybersecurity-ethicalhacking-linux-activity-7427705005240983553-rNXK" target="_blank" class="btn-apex !text-[9px] !px-4 !py-2">Decrypt Source Node</a>
+                    </div>
+                </div>
+
+                <!-- Mehndi Creations -->
+                <div class="hud-panel group laser-scan tilt-node overflow-hidden">
+                    <div class="p-10">
+                        <div class="flex justify-between text-[9px] mb-8 font-bold uppercase">
+                            <span class="text-cyan-500 border border-cyan-900 px-2 py-0.5">OPS: WEB_ARCH</span>
+                            <span class="text-gray-600">status: live</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-4 group-hover:text-magenta-400 transition uppercase">Mehndi Creations</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-10 h-16">High-performance multi-page artist deployment with automated gallery indexing and client booking protocols.</p>
+                        
+                        <div class="flex flex-wrap gap-3 mb-8">
+                            <span class="px-3 py-1 bg-black border border-white/5 text-[9px] text-white">BOOTSTRAP</span>
+                            <span class="px-3 py-1 bg-black border border-white/5 text-[9px] text-white">JS_ES6</span>
+                        </div>
+
+                        <a href="https://vignesh7778.github.io/Gomathi_mehendi_creations/" target="_blank" class="btn-apex !text-[9px] !px-4 !py-2">Execute Live UI</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Vault (As per your Screenshot) -->
+        <section class="scroll-mt-32 px-8 max-w-7xl mx-auto my-48">
+            <div class="flex items-center gap-10 mb-20">
+                <h2 class="text-5xl font-black text-white uppercase tracking-tighter">THE_VAULT</h2>
+                <div class="h-px flex-1 bg-white/10"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="hud-panel p-10 flex flex-col items-center text-center group tilt-node">
+                    <div class="w-16 h-16 border border-white/10 flex items-center justify-center mb-8 grayscale group-hover:grayscale-0 transition">🛡</div>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-1">Ethical Hacking</h4>
+                    <p class="text-[9px] text-gray-600 uppercase font-mono tracking-tighter">GUVI_CERTIFIED_PROTOCOL</p>
+                </div>
+                <div class="hud-panel p-10 flex flex-col items-center text-center group tilt-node">
+                    <div class="w-16 h-16 border border-white/10 flex items-center justify-center mb-8 grayscale group-hover:grayscale-0 transition">💻</div>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-1">Full Stack Node</h4>
+                    <p class="text-[9px] text-gray-600 uppercase font-mono tracking-tighter">INTERNSHIP_CREDENTIAL</p>
+                </div>
+                <div class="hud-panel p-10 flex flex-col items-center text-center group tilt-node">
+                    <div class="w-16 h-16 border border-white/10 flex items-center justify-center mb-8 grayscale group-hover:grayscale-0 transition">🏆</div>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-1">Proficiency Rank 2</h4>
+                    <p class="text-[9px] text-gray-600 uppercase font-mono tracking-tighter">ACADEMIC_REGISTRY_HONOR</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secure Terminal Uplink (Matching f17690.png) -->
+        <section id="uplink" class="scroll-mt-32 px-8 max-w-7xl mx-auto mb-48">
+            <div class="hud-panel p-12 md:p-24 border-t-4 border-cyan-500">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
+                    <div>
+                        <h2 class="text-5xl font-black text-white mb-8 uppercase tracking-tighter">SECURE_UPLINK</h2>
+                        <p class="text-gray-500 text-sm mb-12 font-mono leading-relaxed uppercase">Initiating biometric handshake. All transmissions are routed via end-to-end encrypted tunnels for direct admin review.</p>
+                        
+                        <div class="space-y-10 text-[11px] font-mono text-cyan-500/70">
+                            <div class="flex flex-col gap-2 uppercase">
+                                <span class="text-gray-800 font-bold tracking-[0.4em]">Node_Email</span>
+                                <span class="text-white text-base">vigneshdevi22@gmail.com</span>
+                            </div>
+                            <div class="flex flex-col gap-2 uppercase">
+                                <span class="text-gray-800 font-bold tracking-[0.4em]">Comm_Channel</span>
+                                <span class="text-white text-base">+91 6374340277</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="contact-form" class="space-y-6">
+                        <input type="hidden" name="access_key" value="706b9412-7844-4e0f-a60f-1f6f60dde661">
+                        <input type="hidden" name="subject" value="Vignesh_OS: New Message Detected">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <input type="text" name="name" placeholder="FULL_NAME" required class="terminal-input">
+                            <input type="email" name="email" placeholder="EMAIL_SOURCE" required class="terminal-input">
+                        </div>
+                        <input type="tel" name="phone" placeholder="COMM_PHONE" class="terminal-input">
+                        <textarea name="message" placeholder="PACKET_PAYLOAD" rows="5" required class="terminal-input"></textarea>
+                        
+                        <button type="submit" id="submit-node" class="btn-apex w-full tracking-[0.6em]">Send Message</button>
+                        <div id="form-status" class="text-[10px] font-mono mt-6 uppercase text-center min-h-[1.5em] tracking-widest"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="p-24 text-center bg-black border-t border-white/5">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+                <div class="text-left">
+                    <div class="text-[16px] font-black text-white tracking-[0.4em] uppercase">VIGNESH M</div>
+                    <div class="text-[9px] text-gray-700 font-mono mt-2 uppercase tracking-widest">JAVA • CYBER • FULL-STACK</div>
+                </div>
+                <div class="text-[10px] font-mono text-gray-800 uppercase tracking-[1em]">VANGUARD_V16_STABLE</div>
+                <div class="text-right text-[10px] text-gray-600 font-mono uppercase tracking-widest">
+                    &copy; 2026_MASTER_CORE_BUILD
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        const vData = {
+            bio: "Expertly bridging the gap between robust CyberSecurity Engineering and innovative Full-Stack development. Passionate about secure software lifecycles, real-world defensive architectures, and high-performance user interfaces. Engineering for the secure digital future.",
+            skills: [
+                { name: 'React.js / Next.js', val: 95 },
+                { name: 'Node.js / Express', val: 88 },
+                { name: 'Python / Java', val: 85 },
+                { name: 'SQL / MongoDB', val: 90 },
+                { name: 'Security Forensics', val: 94 }
+            ]
+        };
+
+        // --- 1. HUD CURSOR ---
+        const dot = document.getElementById('cursor-dot');
+        const hud = document.getElementById('cursor-hud');
+        document.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+            hud.style.left = e.clientX + 'px'; hud.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('button, a, input, textarea, .cursor-pointer').forEach(t => {
+            t.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            t.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        // --- 2. BOOT SEQUENCE ---
+        let progress = 0;
+        const progressBar = document.getElementById('boot-progress');
+        const overlay = document.getElementById('boot-overlay');
+        const main = document.getElementById('main-view');
+        const statusMsg = document.getElementById('boot-status');
+        const phrases = ["Mounting_Secure_Kernel...", "Initializing_D3_HUD...", "Authorizing_Admin_V...", "Establishing_Session_Node...", "Handshake_Verified"];
+
+        const boot = setInterval(() => {
+            progress += Math.random() * 8;
+            if (progress >= 100) {
+                progress = 100; clearInterval(boot);
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => { overlay.style.display = 'none'; main.classList.remove('opacity-0'); document.body.style.overflow = 'auto'; typeWriter(); }, 500);
+                }, 500);
+            }
+            progressBar.style.width = progress + "%";
+            statusMsg.innerText = phrases[Math.floor((progress/100) * phrases.length)];
+        }, 80);
+
+        // --- 3. MATRIX RAIN ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, columns;
+        const fontSize = 14;
+        const chars = "01VIGNESH_VANGUARD_V16_STABLE";
+        let drops = [];
+
+        function initMatrix() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            columns = Math.floor(width / fontSize);
+            drops = Array(columns).fill(1);
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(1, 1, 3, 0.1)";
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = "#00f3ff";
+            ctx.font = fontSize + "px 'JetBrains Mono'";
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > height && Math.random() > 0.985) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+        window.onresize = initMatrix;
+        initMatrix();
+
+        // --- 4. TYPEWRITER ---
+        let bioIdx = 0;
+        function typeWriter() {
+            const el = document.getElementById('bio-output');
+            if (bioIdx < vData.bio.length) { el.innerHTML += vData.bio.charAt(bioIdx); bioIdx++; setTimeout(typeWriter, 15); }
+        }
+
+        // --- 5. TILT PHYSICS ---
+        document.addEventListener('mousemove', (e) => {
+            document.querySelectorAll('.tilt-node, .tilt-card').forEach(box => {
+                const rect = box.getBoundingClientRect();
+                const x = (e.clientX - (rect.left + rect.width/2)) / 40;
+                const y = (e.clientY - (rect.top + rect.height/2)) / 40;
+                box.style.transform = `perspective(1000px) rotateX(${-y}deg) rotateY(${x}deg)`;
+            });
+        });
+
+        // --- 6. SKILL BARS ---
+        const barsBox = document.getElementById('skills-container');
+        vData.skills.forEach(s => {
+            const div = document.createElement('div');
+            div.innerHTML = `<div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1.5 uppercase"><span>${s.name}</span><span class="text-cyan-500 font-mono">${s.val}%</span></div><div class="skill-rail"><div class="skill-fill" data-val="${s.val}"></div></div>`;
+            barsBox.appendChild(div);
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.querySelectorAll('.skill-fill').forEach(bar => { bar.style.width = bar.dataset.val + "%"; });
+                }
+            });
+        }, { threshold: 0.1 });
+        observer.observe(document.getElementById('skills'));
+
+        // --- 7. RADAR CHART ---
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: ['DEFENSE', 'ANALYSIS', 'FULL-STACK', 'LOGIC', 'AGILITY', 'INCIDENT'],
+                datasets: [{ data: [98, 92, 90, 85, 95, 88], backgroundColor: 'rgba(0, 243, 255, 0.1)', borderColor: '#00f3ff', borderWidth: 1, pointBackgroundColor: '#00f3ff' }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { r: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, angleLines: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { display: false }, pointLabels: { color: '#00f3ff', font: { size: 9, weight: 'bold' } } } }, plugins: { legend: { display: false } } }
+        });
+
+        // --- 8. LOG STREAM ---
+        const logs = ["Auth: Handshake Success", "Scan: 0 Intrusions", "Node: Chennai Active", "Link: Encrypted", "V-Core: Optimized"];
+        function streamLogs() {
+            const container = document.getElementById('log-stream');
+            const l = document.createElement('div');
+            l.innerText = `[${new Date().toLocaleTimeString()}] ${logs[Math.floor(Math.random() * logs.length)]}`;
+            container.appendChild(l);
+            if (container.children.length > 5) container.removeChild(container.firstChild);
+            setTimeout(streamLogs, 3000);
+        }
+        streamLogs();
+
+        // --- 9. WEB3FORMS ---
+        const contactForm = document.getElementById('contact-form');
+        const statusEl = document.getElementById('form-status');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            statusEl.innerText = "STATUS: PACKET_ENCRYPTING...";
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
+            })
+            .then(res => {
+                if(res.status === 200) {
+                    statusEl.style.color = "var(--neon-lime)";
+                    statusEl.innerText = "STATUS: UPLINK_SYNC_COMPLETE.";
+                    contactForm.reset();
+                } else {
+                    statusEl.style.color = "var(--neon-magenta)";
+                    statusEl.innerText = "STATUS: SIGNAL_LOST_RETRY.";
+                }
+            })
+            .finally(() => { setTimeout(() => statusEl.innerText = "", 5000); });
+        });
+
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+
+        function triggerCVExtraction() {
+            const status = document.getElementById('boot-status');
+            bootOverlay.style.display = 'flex';
+            bootOverlay.style.opacity = '1';
+            let dP = 0;
+            const dInt = setInterval(() => {
+                dP += 5;
+                progressBar.style.width = dP + "%";
+                status.innerText = "Decrypting_Document_Sectors...";
+                if (dP >= 100) {
+                    clearInterval(dInt);
+                    window.open('Vignesh_M_CV.pdf', '_blank');
+                    setTimeout(() => { bootOverlay.style.display = 'none'; }, 500);
+                }
+            }, 50);
+        }
+
+        // --- SECURITY BREACH ---
+        window.oncontextmenu = (e) => {
+            e.preventDefault();
+            const b = document.getElementById('breach-warning');
+            b.style.display = 'flex';
+            setTimeout(() => b.style.display = 'none', 2500);
+        }
+    </script>
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</body>
+</html>
