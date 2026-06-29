@@ -73,6 +73,13 @@
     animation: scan-pass 5s linear infinite;
     pointer-events: none;
   }
+
+  .cyber-grid-bg {
+    background-size: 48px 48px;
+    background-image: 
+      linear-gradient(to right, rgba(0, 243, 255, 0.012) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 243, 255, 0.012) 1px, transparent 1px);
+  }
 }
 
 @keyframes scan-pass {

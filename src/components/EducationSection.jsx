@@ -1,7 +1,8 @@
 import React from 'react';
 import { Tilt } from 'react-tilt';
 import { motion } from 'framer-motion';
-import { Shield, Code, Award, Activity } from 'lucide-react';
+import { Shield, Code, Award, GraduationCap } from 'lucide-react';
+import { playHoverTick } from '../utils/audio';
 
 const colorThemes = {
   "theme-primary": {
@@ -33,77 +34,34 @@ const colorThemes = {
     hoverBorder: "group-hover:border-yellow-500",
     barColor: "bg-yellow-500",
     hex: "#eab308"
-  },
-  "cyber-purple": {
-    text: "text-cyber-purple",
-    bg: "bg-cyber-purple/5",
-    border: "border-cyber-purple/20",
-    borderHover: "group-hover:border-cyber-purple/40",
-    shadowHover: "group-hover:shadow-[0_0_30px_rgba(255,0,255,0.12)]",
-    hoverBorder: "group-hover:border-cyber-purple",
-    barColor: "bg-cyber-purple",
-    hex: "#ff00ff"
-  }
-};
-
-const playHoverTick = () => {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    if (!window._sharedAudioCtx) {
-      window._sharedAudioCtx = new AudioContext();
-    }
-    const ctx = window._sharedAudioCtx;
-    if (ctx.state === 'suspended') ctx.resume();
-    
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1400, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.06);
-    
-    gain.gain.setValueAtTime(0.02, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
-    
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    
-    osc.start();
-    osc.stop(ctx.currentTime + 0.06);
-  } catch (e) {
-    // Ignore audio engine blockage
   }
 };
 
 const educationItems = [
   {
-    title: "Ethical Hacking",
-    subtitle: "GUVI CERTIFICATION",
-    icon: Shield,
-    themeKey: "theme-primary",
-    link: "https://www.guvi.in/share-certificate/9W63z22U323T6781rn"
-  },
-  {
-    title: "Full Stack Node",
-    subtitle: "INTERNSHIP COMPLETION",
+    title: "B.E. Computer Science & Engineering",
+    subtitle: "UNDERGRADUATE REGISTRY",
+    institution: "Chennai Node University",
+    desc: "Specializing in software engineering architectures, database logic, and computer networking security protocols.",
     icon: Code,
-    themeKey: "theme-secondary",
-    link: "https://www.linkedin.com/posts/vignesh-m-b4a5ba300_successfully-completed-a-full-stack-web-development-activity-7351233165304176640-RgQm/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEz5wOoBVVDLAbdIPDaqOLdkDjJINfZ_WCQ"
+    themeKey: "theme-secondary"
   },
   {
-    title: "Proficiency Rank 2",
+    title: "Pre-Final Year Candidate",
+    subtitle: "ACADEMIC TIMELINE",
+    institution: "Active Term: 2023 - 2027",
+    desc: "Engaged in threat simulation protocols, full-stack application development paradigms, and secure coding implementations.",
+    icon: Shield,
+    themeKey: "theme-primary"
+  },
+  {
+    title: "General Proficiency Rank 2",
     subtitle: "ACADEMIC EXCELLENCE",
+    institution: "First Year Evaluation Registry",
+    desc: "Recognized for outstanding academic achievement, advanced analytical performance, and mathematical logic.",
     icon: Award,
     themeKey: "yellow-500",
     link: "https://ibb.co/mrF5qBRk"
-  },
-  {
-    title: "Cyber Hygiene",
-    subtitle: "WORKSHOP ATTENDANCE",
-    icon: Activity,
-    themeKey: "cyber-purple",
-    link: "https://www.linkedin.com/posts/vignesh-m-b4a5ba300_cybersecurity-cyberhygiene-workshop-activity-7384221066644107265-qScE/?utm_source=share&utm_medium=member_android&rcm=ACoAAEz5wOoBVVDLAbdIPDaqOLdkDjJINfZ_WCQ"
   }
 ];
 
@@ -121,29 +79,37 @@ const EducationSection = () => {
         
         <div className="flex items-center gap-10 mb-20">
           <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter font-cyber">
-            EDUCATION & CERTIFICATIONS
+            ACADEMIC REGISTRY
           </h2>
           <div className="h-px flex-1 bg-white/10"></div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           
           {educationItems.map((item, idx) => {
             const theme = colorThemes[item.themeKey] || colorThemes["theme-primary"];
+            const isClickable = !!item.link;
+            const CardComponent = isClickable ? motion.a : motion.div;
+            const extraProps = isClickable 
+              ? { 
+                  href: item.link, 
+                  target: "_blank", 
+                  rel: "noreferrer", 
+                  onClick: (e) => handleLinkClick(e, item.link),
+                  className: "cursor-pointer block"
+                } 
+              : {};
             
             return (
-              <Tilt key={idx} options={{ max: 15, scale: 1.04, speed: 600 }} className="h-full">
-                <motion.a 
+              <Tilt key={idx} options={{ max: 10, scale: 1.02, speed: 600 }} className="h-full">
+                <CardComponent 
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  href={item.link}
-                  target="_blank" 
-                  rel="noreferrer" 
                   onMouseEnter={playHoverTick}
-                  onClick={(e) => handleLinkClick(e, item.link)}
-                  className={`bg-[rgba(10,12,18,0.95)] backdrop-blur-md border border-white/5 ${theme.border} ${theme.borderHover} ${theme.shadowHover} p-6 flex flex-col justify-between group h-full relative overflow-hidden transition-all duration-300 block`}
+                  className={`bg-[rgba(10,12,18,0.95)] backdrop-blur-md border border-white/5 ${theme.border} ${theme.borderHover} ${theme.shadowHover} p-6 flex flex-col justify-between group h-full relative overflow-hidden transition-all duration-300 rounded-xl`}
+                  {...extraProps}
                 >
                   {/* Cyber Dot-Matrix Overlay Grid */}
                   <div 
@@ -181,30 +147,33 @@ const EducationSection = () => {
                           <item.icon size={24} />
                         </div>
                         <span className="font-mono text-[10px] uppercase tracking-wider text-theme-muted bg-white/5 px-2.5 py-1 rounded-sm border border-white/5 flex items-center gap-1.5">
-                          CREDENTIAL <span className="text-yellow-500 font-bold">↗</span>
+                          {item.subtitle} {isClickable && <span className="text-yellow-500 font-bold">↗</span>}
                         </span>
                       </div>
 
-                      <h3 className="font-cyber font-bold text-theme-text text-lg mb-2 leading-tight group-hover:text-white transition-colors">
+                      <h3 className="font-cyber font-bold text-theme-text text-lg mb-1 leading-tight group-hover:text-white transition-colors">
                         {item.title}
                       </h3>
+                      <div className={`text-[11px] font-mono mb-4 ${theme.text} tracking-wider font-bold`}>
+                        {item.institution}
+                      </div>
                       <p className="text-xs text-theme-muted font-mono tracking-wide leading-relaxed">
-                        {item.subtitle}
+                        {item.desc}
                       </p>
                     </div>
 
                     {/* Cryptographic metadata details */}
                     <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between text-[9px] font-mono text-theme-muted">
                       <div>
-                        <span className="opacity-45">HASH:</span> <span className="text-white/60 font-bold">{`0x${(idx * 983271).toString(16).toUpperCase().padEnd(6, 'F').slice(0, 6)}`}</span>
+                        <span className="opacity-45">REG:</span> <span className="text-white/60 font-bold">{`0x${(idx * 983271).toString(16).toUpperCase().padEnd(6, 'F').slice(0, 6)}`}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <span className={`w-1.5 h-1.5 rounded-full ${theme.barColor} animate-pulse`} />
-                        <span className="opacity-70 tracking-wider">VERIFIED</span>
+                        <span className="opacity-70 tracking-wider">ACTIVE_NODE</span>
                       </div>
                     </div>
                   </div>
-                </motion.a>
+                </CardComponent>
               </Tilt>
             );
           })}

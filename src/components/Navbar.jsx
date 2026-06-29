@@ -44,7 +44,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <button onClick={triggerCVExtraction} className="btn-apex !px-5 !py-2 !text-[9px]">DOWNLOAD RESUME</button>
+          <button onClick={triggerCVExtraction} className="btn-outline !px-5 !py-2 !text-[9px]">DOWNLOAD RESUME</button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -64,7 +64,7 @@ const Navbar = () => {
           <a href="#missions" onClick={() => setMobileMenuOpen(false)} className="block text-center hover:text-cyber-cyan transition-all cursor-pointer text-[10px] font-black tracking-[0.2em] uppercase font-cyber py-2">PROJECTS</a>
           <a href="#uplink" onClick={() => setMobileMenuOpen(false)} className="block text-center hover:text-cyber-cyan transition-all cursor-pointer text-[10px] font-black tracking-[0.2em] uppercase font-cyber py-2">CONTACT</a>
           <div className="flex justify-center pt-4">
-            <button onClick={triggerCVExtraction} className="btn-apex !px-5 !py-2 !text-[9px]">DOWNLOAD RESUME</button>
+            <button onClick={triggerCVExtraction} className="btn-outline !px-5 !py-2 !text-[9px]">DOWNLOAD RESUME</button>
           </div>
         </div>
       </div>

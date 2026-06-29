@@ -533,6 +533,21 @@ function App() {
     return () => window.removeEventListener('click', handleUserInteraction);
   }, [loading, isReload, exfilActive, crashActive, bgMusicStopped]);
 
+  // Resume background music when user returns to the tab
+  useEffect(() => {
+    const handleFocusOrVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        setBgMusicStopped(false);
+      }
+    };
+    window.addEventListener('focus', handleFocusOrVisibility);
+    document.addEventListener('visibilitychange', handleFocusOrVisibility);
+    return () => {
+      window.removeEventListener('focus', handleFocusOrVisibility);
+      document.removeEventListener('visibilitychange', handleFocusOrVisibility);
+    };
+  }, []);
+
   useEffect(() => {
     const comingBack = sessionStorage.getItem('coming_back_from_redirect');
     if (comingBack) {
@@ -869,7 +884,7 @@ function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-cyber-black text-white font-sans selection:bg-cyber-cyan/30 selection:text-white">
+    <div className="relative min-h-screen bg-cyber-black text-white font-sans selection:bg-cyber-cyan/30 selection:text-white cyber-grid-bg">
       <CustomCursor />
       
       {breachWarning && (

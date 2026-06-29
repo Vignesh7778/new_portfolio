@@ -1,8 +1,8 @@
 import React from 'react';
+import { playHoverTick } from '../utils/audio';
 import { Tilt } from 'react-tilt';
 import { motion } from 'framer-motion';
 import { Briefcase } from 'lucide-react';
-import { playHoverTick } from '../utils/audio';
 
 const colorThemes = {
   "cyber-lime": {
@@ -27,14 +27,13 @@ const colorThemes = {
   }
 };
 
-
 const InternshipSection = () => {
   const theme = colorThemes["cyber-lime"];
 
   return (
     <section id="experience" className="py-24 relative">
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        
+
         <div className="flex items-center gap-6 mb-16">
           <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter font-cyber">
             WORK EXPERIENCE
@@ -43,7 +42,7 @@ const InternshipSection = () => {
         </div>
 
         <Tilt options={{ max: 4, scale: 1.005, speed: 600 }} className="w-full">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -52,7 +51,7 @@ const InternshipSection = () => {
             className={`bg-[rgba(10,12,18,0.95)] backdrop-blur-md border border-white/5 ${theme.border} ${theme.borderHover} ${theme.shadowHover} p-6 md:p-10 rounded-xl group relative overflow-hidden transition-all duration-300 h-full flex flex-col justify-between`}
           >
             {/* Cyber Dot-Matrix Overlay Grid */}
-            <div 
+            <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"
               style={{
                 backgroundImage: `radial-gradient(circle at 50% 50%, ${theme.hex}06 0%, transparent 70%), 
@@ -69,14 +68,14 @@ const InternshipSection = () => {
 
             {/* Laser Scanline */}
             <div className={`absolute top-0 left-0 w-full h-[2px] ${theme.barColor} opacity-0 group-hover:opacity-75 group-hover:animate-[scan-pass_3s_linear_infinite] pointer-events-none z-10`}
-                 style={{
-                   boxShadow: `0 0 10px ${theme.hex}`,
-                 }}
+              style={{
+                boxShadow: `0 0 10px ${theme.hex}`,
+              }}
             />
 
             {/* Watermark Overlay */}
             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-25 transition-all duration-300 group-hover:scale-110 pointer-events-none z-0">
-               <Briefcase size={80} className={`${theme.text}`} />
+              <Briefcase size={80} className={`${theme.text}`} />
             </div>
 
             <div className="relative z-10 flex-grow">
@@ -111,7 +110,7 @@ const InternshipSection = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-6">
                 <div className="lg:col-span-2">
                   <h4 className="text-[10px] font-bold text-gray-500 mb-6 uppercase tracking-widest border-b border-white/5 pb-2 font-mono">
@@ -129,10 +128,10 @@ const InternshipSection = () => {
                     </li>
                   </ul>
                 </div>
-                
+
                 {/* Inner technologies box */}
                 <Tilt options={{ max: 10, scale: 1.03, speed: 600 }} className="h-full">
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
@@ -141,7 +140,7 @@ const InternshipSection = () => {
                     className={`bg-[rgba(5,7,12,0.98)] p-6 border ${colorThemes["cyber-cyan"].border} ${colorThemes["cyber-cyan"].borderHover} ${colorThemes["cyber-cyan"].shadowHover} rounded-lg group/tech relative overflow-hidden transition-all duration-300 h-full`}
                   >
                     {/* Cyber Dot-Matrix Overlay Grid */}
-                    <div 
+                    <div
                       className="absolute inset-0 opacity-0 group-hover/tech:opacity-100 transition-opacity duration-500 pointer-events-none z-0"
                       style={{
                         backgroundImage: `radial-gradient(circle at 50% 50%, ${colorThemes["cyber-cyan"].hex}06 0%, transparent 70%), 
@@ -158,9 +157,9 @@ const InternshipSection = () => {
 
                     {/* Laser Scanline */}
                     <div className={`absolute top-0 left-0 w-full h-[1.5px] ${colorThemes["cyber-cyan"].barColor} opacity-0 group-hover/tech:opacity-75 group-hover/tech:animate-[scan-pass_2s_linear_infinite] pointer-events-none z-10`}
-                         style={{
-                           boxShadow: `0 0 8px ${colorThemes["cyber-cyan"].hex}`,
-                         }}
+                      style={{
+                        boxShadow: `0 0 8px ${colorThemes["cyber-cyan"].hex}`,
+                      }}
                     />
 
                     <h4 className="text-[10px] font-bold text-white mb-4 uppercase font-mono relative z-10">
