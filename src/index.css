@@ -56,6 +56,15 @@
     @apply border-cyber-cyan bg-cyber-cyan/5;
   }
 
+  .btn-outline-fill {
+    @apply border border-white/10 text-white font-bold px-8 py-3 text-xs uppercase transition-all duration-300;
+    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+  }
+
+  .btn-outline-fill:hover {
+    @apply border-cyber-cyan bg-cyber-cyan text-black shadow-[0_0_15px_rgba(0,243,255,0.4)];
+  }
+
   .cyber-button {
     @apply btn-outline; /* Map old cyber-button to btn-outline */
   }

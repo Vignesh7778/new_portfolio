@@ -163,7 +163,7 @@ const ContactSection = () => {
                       <button 
                         type="button"
                         onClick={triggerCVExtraction}
-                        className="btn-outline !px-6 !py-2.5 !text-[10px] tracking-widest cursor-pointer"
+                        className="btn-outline-fill !px-6 !py-2.5 !text-[10px] tracking-widest cursor-pointer"
                       >
                         DOWNLOAD RESUME
                       </button>
