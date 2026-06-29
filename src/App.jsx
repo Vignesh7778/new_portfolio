@@ -534,7 +534,6 @@ function App() {
   }, [loading, isReload, exfilActive, crashActive, bgMusicStopped]);
 
   useEffect(() => {
-    const sessionActive = sessionStorage.getItem('site_session_active');
     const comingBack = sessionStorage.getItem('coming_back_from_redirect');
     if (comingBack) {
       sessionStorage.removeItem('coming_back_from_redirect');
@@ -551,11 +550,9 @@ function App() {
           sessionStorage.removeItem('saved_scroll_y');
         }, 150);
       }
-    } else if (sessionActive) {
+    } else {
       setIsReload(true);
       setLoading(true);
-    } else {
-      sessionStorage.setItem('site_session_active', 'true');
     }
   }, []);
 
@@ -585,7 +582,7 @@ function App() {
   // Global Exfiltration Trigger
   useEffect(() => {
     const handleTriggerExfil = (e) => {
-      const { name, email, size, submitPromise, onComplete } = e.detail;
+      const { name, email, size, url, submitPromise, onComplete } = e.detail;
 
       if (name === 'VIGNESH_M_resume.pdf') {
         setBgMusicStopped(true);
@@ -634,6 +631,16 @@ function App() {
           currentProgress = 100;
           clearInterval(interval);
 
+          if (name === 'VIGNESH_M_resume.pdf' || url) {
+            // Close exfil loader and open warning screen directly
+            setExfilActive(false);
+            setBgMusicStopped(false);
+            window.dispatchEvent(new CustomEvent('trigger-cyber-crash', {
+              detail: { url: url || '/VIGNESH_M_resume.pdf' }
+            }));
+            return;
+          }
+
           // Phase 1: Overload
           setBlastPhase('overload');
           playOverloadAlarm();
@@ -651,7 +658,6 @@ function App() {
             setExfilIsBlasted(true);
             playExplosionSound();
             playGlassShatter();
-            speakBlastMessage();
             // Fade out hacking audio on detonation
             if (hackingAudioRef.current) {
               const ha = hackingAudioRef.current;

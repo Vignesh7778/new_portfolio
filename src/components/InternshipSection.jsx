@@ -2,6 +2,7 @@ import React from 'react';
 import { Tilt } from 'react-tilt';
 import { motion } from 'framer-motion';
 import { Briefcase } from 'lucide-react';
+import { playHoverTick } from '../utils/audio';
 
 const colorThemes = {
   "cyber-lime": {
@@ -26,35 +27,6 @@ const colorThemes = {
   }
 };
 
-const playHoverTick = () => {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    if (!window._sharedAudioCtx) {
-      window._sharedAudioCtx = new AudioContext();
-    }
-    const ctx = window._sharedAudioCtx;
-    if (ctx.state === 'suspended') ctx.resume();
-    
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1400, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.06);
-    
-    gain.gain.setValueAtTime(0.02, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
-    
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    
-    osc.start();
-    osc.stop(ctx.currentTime + 0.06);
-  } catch (e) {
-    // Ignore audio engine blockage
-  }
-};
 
 const InternshipSection = () => {
   const theme = colorThemes["cyber-lime"];

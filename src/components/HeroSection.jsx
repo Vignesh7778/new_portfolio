@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Tilt } from 'react-tilt';
 import { FaLinkedin, FaGithub } from 'react-icons/fa';
@@ -47,6 +47,21 @@ const playHoverTick = () => {
 };
 
 const HeroSection = () => {
+  const [typedBio, setTypedBio] = useState('');
+  const bioText = "Expertly bridging the gap between robust CyberSecurity Engineering and innovative Full-Stack development. Passionate about secure software lifecycles, real-world defensive architectures, and high-performance user interfaces. Engineering for the secure digital future.";
+
+  useEffect(() => {
+    let idx = 0;
+    const interval = setInterval(() => {
+      setTypedBio((prev) => prev + bioText.charAt(idx));
+      idx++;
+      if (idx >= bioText.length) {
+        clearInterval(interval);
+      }
+    }, 15);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center pt-20 pb-32 overflow-hidden">
       <div className="container mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center z-10 gap-16">
@@ -71,8 +86,8 @@ const HeroSection = () => {
               Cybersecurity Engineer <span className="text-cyber-cyan/50 mx-2">/</span> Full-Stack Developer
             </h2>
 
-            <p className="text-gray-400 font-mono text-sm leading-relaxed max-w-2xl border-l-2 border-cyber-cyan/50 pl-6 italic mb-10">
-              "Motivated Computer Science Engineering student with a strong interest in cybersecurity and full-stack web development. Passionate about building secure, user-friendly applications and continuously improving problem-solving skills."
+            <p className="text-gray-400 font-mono text-sm leading-relaxed max-w-2xl border-l-2 border-cyber-cyan/50 pl-6 italic mb-10 min-h-[80px]">
+              "{typedBio}"<span className="animate-pulse text-cyber-cyan">|</span>
             </p>
 
             <div className="flex flex-wrap gap-6 pt-4">
@@ -96,7 +111,7 @@ const HeroSection = () => {
         </div>
 
         {/* Right Content - Profile Widget */}
-        <div className="w-full lg:w-1/3 hidden lg:block">
+        <div className="w-full lg:w-1/3 block mt-10 lg:mt-0 max-w-md mx-auto lg:max-w-none">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}

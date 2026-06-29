@@ -19,9 +19,7 @@ const Navbar = () => {
         name: 'VIGNESH_M_resume.pdf',
         email: 'LOCAL_UPLINK@PORT',
         size: '114 KB',
-        onComplete: () => {
-          window.open('/VIGNESH_M_resume.pdf', '_blank');
-        }
+        url: '/VIGNESH_M_resume.pdf'
       }
     }));
   };

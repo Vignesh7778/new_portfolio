@@ -50,6 +50,17 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const theme = colorThemes["cyber-cyan"];
 
+  const triggerCVExtraction = () => {
+    window.dispatchEvent(new CustomEvent('trigger-cyber-exfil', {
+      detail: {
+        name: 'VIGNESH_M_resume.pdf',
+        email: 'LOCAL_UPLINK@PORT',
+        size: '114 KB',
+        url: '/VIGNESH_M_resume.pdf'
+      }
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const rawForm = e.target;
@@ -145,6 +156,18 @@ const ContactSection = () => {
                   <div className="flex flex-col gap-2 uppercase">
                     <span className="text-gray-800 font-bold tracking-[0.4em]">Phone Number</span>
                     <span className="text-white text-base">+91 6374340277</span>
+                  </div>
+                  <div className="flex flex-col gap-3 uppercase">
+                    <span className="text-gray-800 font-bold tracking-[0.4em]">Curriculum Vitae</span>
+                    <div>
+                      <button 
+                        type="button"
+                        onClick={triggerCVExtraction}
+                        className="btn-apex !px-6 !py-2.5 !text-[10px] tracking-widest cursor-pointer"
+                      >
+                        DOWNLOAD RESUME
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
