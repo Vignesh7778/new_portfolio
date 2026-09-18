@@ -888,7 +888,7 @@ function App() {
       <CustomCursor />
       
       {breachWarning && (
-        <div className="fixed inset-0 z-[100000] bg-red-900/90 flex items-center justify-center pointer-events-none">
+        <div className="fixed inset-0 z-[100000] bg-red-900/90 flex items-center justify-center pointer-events-none cursor-hidden">
           <div className="text-center">
             <div className="text-6xl mb-4">⚠️</div>
             <h1 className="font-cyber text-4xl text-white font-bold tracking-widest uppercase">Security Breach Detected</h1>
@@ -905,7 +905,7 @@ function App() {
             initial="idle"
             animate={blastPhase === 'idle' ? 'idle' : blastPhase}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/95 z-[999999] flex flex-col items-center justify-center p-6 text-cyber-cyan font-mono overflow-hidden"
+            className="fixed inset-0 bg-black/95 z-[999999] flex flex-col items-center justify-center p-6 text-cyber-cyan font-mono overflow-hidden cursor-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyber-cyan/5 to-transparent pointer-events-none animate-scanline" />
 
